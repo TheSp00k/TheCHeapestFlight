@@ -10,23 +10,53 @@ import {
     resultGroupItemsWrapperStyles,
     resultGroupItemLabelStyles,
     resultGroupItemValueStyles,
-    resultTotalPriceStyles
+    resultTotalPriceStyles,
+    inputErrorMessageStyle
 } from 'app/components/SearchResult/searchResult.styles';
-import { IAppComponentState } from 'app/containers/App';
+import { IAppComponentState, IInputError, IResultFare } from 'app/containers/App';
 
-export class SearchResultComponent extends React.Component<any, IAppComponentState> {
+  
+interface ISearchResultComponentProps {
+    inputErrors: Array<IInputError> | null;
+    resultFare?: IResultFare | null;
+    noFlightsFoundMessage?: string | null;
+}
+
+export class SearchResultComponent extends React.Component<ISearchResultComponentProps, IAppComponentState> {
     render() {
-        
-        if (!this.props.resultFare) {
-            return null
-        }
-        if (this.props.resultFare.message) {
+        if (this.props.inputErrors && this.props.inputErrors.length > 0) {
             return (
-                <div className={css(resultTitleStyles)}>
-                    {this.props.resultFare.message}
+                <div className={css(resultComponentStyles)}>
+                    <div className={css(resultTitleStyles)}>
+                        Some input errors has occured:
+                    </div>
+                    {
+                        this.props.inputErrors.map((error, index) => {
+                            return (
+                                <div key={index} className={css(inputErrorMessageStyle)}>
+                                    {error.message}
+                                </div>
+                            )
+                        })
+                    }
+                </div>
+            )
+        }
+
+        if (this.props.noFlightsFoundMessage) {
+            return (
+                <div className={css(resultComponentStyles)}>
+                    <div className={css(resultTitleStyles)}>
+                        {this.props.noFlightsFoundMessage}
+                    </div>
                 </div>
             );
         }
+
+        if (!this.props.resultFare) {
+            return null;
+        }
+
         const inbound = this.props.resultFare.inbound;
         const outbound = this.props.resultFare.outbound;
         const summary = this.props.resultFare.summary;
@@ -50,7 +80,7 @@ export class SearchResultComponent extends React.Component<any, IAppComponentSta
                         </div>
                         <div className={css(resultGroupItemStyles)}>
                             <div className={css(resultGroupItemLabelStyles)}>Price:</div>
-                            <div className={css(resultGroupItemValueStyles)}>{`${outbound.price.currencySymbol} ${outbound.price.value}`}</div>
+                            <div className={css(resultGroupItemValueStyles)}>{`${outbound.price.currencySymbol} ${Number.parseFloat(outbound.price.value.toString()).toFixed(2)}`}</div>
                         </div>
                     </div>
                 </div>
@@ -69,7 +99,7 @@ export class SearchResultComponent extends React.Component<any, IAppComponentSta
                         </div>
                         <div className={css(resultGroupItemStyles)}>
                             <div className={css(resultGroupItemLabelStyles)}>Price:</div>
-                            <div className={css(resultGroupItemValueStyles)}>{`${inbound.price.currencySymbol} ${inbound.price.value}`}</div>
+                            <div className={css(resultGroupItemValueStyles)}>{`${inbound.price.currencySymbol} ${Number.parseFloat(inbound.price.value.toString()).toFixed(2)}`}</div>
                         </div>
                     </div>
                 </div>
@@ -78,7 +108,7 @@ export class SearchResultComponent extends React.Component<any, IAppComponentSta
                         Total price:
                     </div>
                     <div className={css(resultTotalPriceStyles)}>
-                        {`${summary.price.currencySymbol} ${summary.price.value}`}
+                        {`${summary.price.currencySymbol} ${Number.parseFloat(summary.price.value.toString()).toFixed(2)}`}
                     </div>
                 </div>
             </div>

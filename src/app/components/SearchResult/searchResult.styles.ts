@@ -40,3 +40,13 @@ export const resultTotalPriceStyles = {
     fontSize: '36px',
     margin: '10px 0'
 }
+export const inputErrorMessageStyle = {
+    position: 'relative',
+    padding: '.75rem 1.25rem',
+    marginBottom: '1rem',
+    border: '1px solid transparent',
+    borderRadius: '.25rem',
+    color: '#721c24',
+    backgroundColor: '#f8d7da',
+    borderColor: '#f5c6cb'
+}

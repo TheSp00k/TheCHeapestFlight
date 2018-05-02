@@ -7,14 +7,14 @@ import { DateInputComponent } from 'app/components/SearchForm/DateInputComponent
 import { SelectComponent } from 'app/components/SearchForm/SelectComponent';
 
 export interface ISearchFormParams {
-    departureAirportIataCode: string | null;
-    arrivalAirportIataCode: string | null;
-    outboundDepartureDateFrom: string | null;
-    outboundDepartureDateTo: string | null;
-    inboundDepartureDateFrom: string | null;
-    inboundDepartureDateTo: string | null;
-    priceValueTo: string | null;
-    currency: string | null;
+    departureAirportIataCode: string;
+    arrivalAirportIataCode: string;
+    outboundDepartureDateFrom: string;
+    outboundDepartureDateTo: string;
+    inboundDepartureDateFrom: string;
+    inboundDepartureDateTo: string;
+    priceValueTo: string;
+    currency: string;
 }
 const EMPTY_STATE = {
     departureAirportIataCode: '',
@@ -51,16 +51,18 @@ export class SearchFormComponent extends React.Component<any, ISearchFormParams>
         this.fillMocksForDev = this.fillMocksForDev.bind(this);
     }
 
-
-
     handleFormSubmit(event: any): void {
         this.props.handleFormSubmit(this.state, event);
         event.preventDefault();
     }
 
-    handleInputChange(event?: any) {
-        const inputValue = event.target.value;
+    handleInputChange(event: any, uppercase?: boolean) {
+
+        let inputValue = event.target.value;
         const inputName = event.target.name;
+        if (uppercase) {
+            inputValue = event.target.value.toUpperCase();
+        }
 
         this.setState({ [inputName]: inputValue });
 
@@ -93,6 +95,7 @@ export class SearchFormComponent extends React.Component<any, ISearchFormParams>
                                 inputValue={this.state.departureAirportIataCode}
                                 required={true}
                                 maxLength={3}
+                                uppercase={true}
                             />
                             <TextInputComponent
                                 inputLabel={'To airport:'}
@@ -102,6 +105,7 @@ export class SearchFormComponent extends React.Component<any, ISearchFormParams>
                                 inputValue={this.state.arrivalAirportIataCode}
                                 required={true}
                                 maxLength={3}
+                                uppercase={true}
                             />
                         </div>
                     </div>

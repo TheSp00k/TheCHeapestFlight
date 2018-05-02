@@ -10,7 +10,8 @@ interface ITextInputComponentProps {
     required?: boolean;
     maxLength?: number;
     inputValue: any;
-    onInputChange: () => void;
+    uppercase?: boolean;
+    onInputChange: (event: any, uppercase: boolean | undefined) => void;
 }
 
 export const TextInputComponent = (props: ITextInputComponentProps) => {
@@ -23,7 +24,16 @@ export const TextInputComponent = (props: ITextInputComponentProps) => {
                         <span className={css(inputComponentRequiredStyles)}>*</span>
                     }
                 </div>
-                <input required={props.required} maxLength={props.maxLength} onChange={props.onInputChange} className={css(inputStyles)} name={props.inputName} value={props.inputValue} placeholder={props.placeholder} type='text' />
+                <input
+                    required={props.required}
+                    maxLength={props.maxLength}
+                    onChange={(event) => props.onInputChange(event, props.uppercase)}
+                    className={css(inputStyles)}
+                    name={props.inputName}
+                    value={props.inputValue}
+                    placeholder={props.placeholder}
+                    type='text'
+                />
             </label>
         </div>
     );
